@@ -31,4 +31,8 @@ public class VoteAgendaService {
                 .map(voteAgenda -> new VoteAgendaResponse(voteAgenda.getId(), voteAgenda.getDescription()))
                 .collect(toList());
     }
+
+    public VoteAgenda findById(long id) {
+        return repository.findById(id);
+    }
 }

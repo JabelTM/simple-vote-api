@@ -28,4 +28,8 @@ public class VoteAgendaRepository {
     public List<VoteAgenda> findAll() {
         return new ArrayList<>(repository.values());
     }
+
+    public VoteAgenda findById(long id) {
+        return repository.get(id);
+    }
 }
