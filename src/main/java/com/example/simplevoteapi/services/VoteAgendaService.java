@@ -3,6 +3,7 @@ package com.example.simplevoteapi.services;
 import com.example.simplevoteapi.domain.VoteAgenda;
 import com.example.simplevoteapi.domain.request.CreateVoteAgendaRequest;
 import com.example.simplevoteapi.domain.response.VoteAgendaResponse;
+import com.example.simplevoteapi.exceptions.AgendaException;
 import com.example.simplevoteapi.repository.VoteAgendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,17 @@ public class VoteAgendaService {
     }
 
     public VoteAgenda findById(long id) {
-        return repository.findById(id);
+        VoteAgenda agenda = repository.findById(id);
+
+        if (agenda == null) {
+            throw new AgendaException(AgendaException.AGENDA_NOT_FIND);
+        }
+
+        return agenda;
     }
+
+    public void update(VoteAgenda agenda) {
+        repository.save(agenda);
+    }
+
 }
