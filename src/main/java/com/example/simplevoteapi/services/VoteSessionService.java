@@ -91,4 +91,15 @@ public class VoteSessionService {
                 .map(session -> voteSessionResponseMapper.map(session))
                 .collect(toList());
     }
+
+    public VoteSession getOpenSession() {
+        return session;
+    }
+
+    public void update(VoteSession session) {
+        this.session = session;
+        repository.save(session);
+        voteAgendaService.update(session.getAgenda());
+    }
+
 }

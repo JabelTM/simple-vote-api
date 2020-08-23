@@ -1,8 +1,18 @@
 package com.example.simplevoteapi.domain;
 
-public enum  Vote {
+import lombok.Getter;
+import lombok.Setter;
 
-    SIM,
-    NAO;
+import javax.validation.constraints.NotNull;
+
+@Getter
+@Setter
+public class Vote {
+
+    @NotNull
+    private VoteEnum vote;
+
+    @NotNull
+    private User user;
 
 }
