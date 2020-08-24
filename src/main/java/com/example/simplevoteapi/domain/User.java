@@ -1,16 +1,20 @@
 package com.example.simplevoteapi.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+import javax.persistence.*;
+
+@Data
+@Entity
+@Table(name="users")
+@EqualsAndHashCode(of = "id")
+@Getter @Setter @Builder
 public class User {
 
-    @EqualsAndHashCode.Include
+    @Id
     private long id;
+
+    @Column(unique = true)
     private String cpf;
 
 }

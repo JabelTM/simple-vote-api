@@ -1,6 +1,6 @@
 package com.example.simplevoteapi.services;
 
-import com.example.simplevoteapi.domain.VoteAgenda;
+import com.example.simplevoteapi.domain.Agenda;
 import com.example.simplevoteapi.domain.request.CreateVoteAgendaRequest;
 import com.example.simplevoteapi.domain.response.VoteAgendaResponse;
 import com.example.simplevoteapi.exceptions.AgendaException;
@@ -19,32 +19,34 @@ public class VoteAgendaService {
     private VoteAgendaRepository repository;
 
     public VoteAgendaResponse create(CreateVoteAgendaRequest request) {
-        VoteAgenda voteAgenda = new VoteAgenda();
-        voteAgenda.setDescription(request.getDescription());
+        Agenda agenda = new Agenda();
+        agenda.setDescription(request.getDescription());
 
-        voteAgenda = repository.save(voteAgenda);
-        return new VoteAgendaResponse(voteAgenda.getId(), voteAgenda.getDescription());
+        agenda = repository.save(agenda);
+        return VoteAgendaResponse.builder()
+                .id(agenda.getId())
+                .description(agenda.getDescription())
+                .build();
     }
 
     public List<VoteAgendaResponse> getVoteAgendas() {
         return repository.findAll()
                 .stream()
-                .map(voteAgenda -> new VoteAgendaResponse(voteAgenda.getId(), voteAgenda.getDescription()))
+                .map(voteAgenda -> VoteAgendaResponse.builder()
+                                        .id(voteAgenda.getId())
+                                        .description(voteAgenda.getDescription())
+                                        .build())
                 .collect(toList());
     }
 
-    public VoteAgenda findById(long id) {
-        VoteAgenda agenda = repository.findById(id);
+    public Agenda findById(long id) {
+        Agenda agenda = repository.findById(id);
 
         if (agenda == null) {
             throw new AgendaException(AgendaException.AGENDA_NOT_FIND);
         }
 
         return agenda;
-    }
-
-    public void update(VoteAgenda agenda) {
-        repository.save(agenda);
     }
 
 }
