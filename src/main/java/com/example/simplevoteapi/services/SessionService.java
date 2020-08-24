@@ -6,6 +6,7 @@ import com.example.simplevoteapi.domain.request.CreateSessionRequest;
 import com.example.simplevoteapi.domain.response.SessionResponse;
 import com.example.simplevoteapi.mapper.SessionResponseMapper;
 import com.example.simplevoteapi.repository.SessionRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @Service
 public class SessionService {
 
@@ -32,10 +34,12 @@ public class SessionService {
 
 
     public SessionResponse createAndOpenSession(CreateSessionRequest request) {
+        log.info("[SessionController.createAndOpenSession] Inicio do processo de abertura de sessão de votação.");
         Session session = create(request);
 
         session = sessionControlService.start(session);
 
+        log.info("[SessionController.createAndOpenSession] Fim do processo de abertura de sessão de votação.");
         return sessionResponseMapper.map(session);
     }
 
@@ -51,6 +55,7 @@ public class SessionService {
     }
 
     public List<SessionResponse> getSessions() {
+        log.info("[SessionController.getSessions] Buscando todas as sessões.");
         return repository.findAll()
                 .stream()
                 .map(session -> sessionResponseMapper.map(session))
@@ -62,11 +67,8 @@ public class SessionService {
     }
 
     public Session findById(long id) {
+        log.info("[SessionController.findById] Buscando dados da sessão {}.", id);
         return repository.findById(id);
-    }
-
-    public List<Session> getOpenAgendas() {
-        return repository.findAllBySessionOpen(true);
     }
 
 }
