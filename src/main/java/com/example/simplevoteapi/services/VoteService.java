@@ -1,24 +1,26 @@
 package com.example.simplevoteapi.services;
 
-import com.example.simplevoteapi.domain.Vote;
 import com.example.simplevoteapi.domain.Session;
+import com.example.simplevoteapi.domain.Vote;
 import com.example.simplevoteapi.domain.request.VoteRequest;
 import com.example.simplevoteapi.exceptions.VoteException;
 import com.example.simplevoteapi.mapper.VoteMapper;
 import com.example.simplevoteapi.repository.VoteRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class VoteService {
 
     @Autowired
-    private VoteSessionService voteSessionService;
+    private SessionControlService sessionControlService;
 
     @Autowired
-    private VoteAgendaService voteAgendaService;
+    private AgendaService agendaService;
 
     @Autowired
     private VoteMapper voteMapper;
@@ -27,7 +29,8 @@ public class VoteService {
     private VoteRepository voteRepository;
 
     public void vote(VoteRequest voteRequest) {
-        Session session = voteSessionService.getOpenSession();
+        log.info("[VoteService.vote] Inicio do processo de registro de voto.");
+        Session session = sessionControlService.getOpenSession();
 
         validateAgenda(voteRequest, session);
 
@@ -36,16 +39,18 @@ public class VoteService {
         validateVote(vote, session);
 
         voteRepository.save(vote);
+        log.info("[VoteService.vote] Voto registrado.");
 
-        voteSessionService.updateOpenSession();
+        sessionControlService.updateOpenSession();
+        log.info("[VoteService.vote] Fim do processo de registro de voto.");
     }
 
     private void validateVote(Vote vote, Session session) {
-        boolean userAlreadyVote = session
-                .getAgenda()
-                .getVotes()
-                .stream()
-                .anyMatch(v -> v.getUser().equals(vote.getUser()));
+        log.info("[VoteService.validateVote] Validando voto.");
+        boolean userAlreadyVote = voteRepository
+                                    .findAllByAgendaId(session.getAgenda().getId())
+                                    .stream()
+                                    .anyMatch(v -> v.getUser().equals(vote.getUser()));
 
         if (userAlreadyVote) {
             throw new VoteException(VoteException.USER_ALREADY_VOTED);
@@ -53,13 +58,14 @@ public class VoteService {
     }
 
     private void validateAgenda(VoteRequest vote, Session session) {
-        if (session == null || session.getAgenda().getId() != vote.getVoteAgendaId()) {
+        log.info("[VoteService.validateAgenda] Validando pauta.");
+        if (session == null || session.getAgenda().getId() != vote.getAgendaId()) {
             throw new VoteException(VoteException.AGENDA_IS_CLOSED);
         }
     }
 
     public List<Vote> getVotes(long agendaId) {
-        return voteAgendaService.findById(agendaId)
-                .getVotes();
+        log.info("[VoteService.getVotes] Buscando votos para pauta: {}.", agendaId);
+        return voteRepository.findAllByAgendaId(agendaId);
     }
 }

@@ -2,19 +2,19 @@ package com.example.simplevoteapi.mapper;
 
 import com.example.simplevoteapi.domain.Agenda;
 import com.example.simplevoteapi.domain.Session;
-import com.example.simplevoteapi.domain.response.VoteAgendaResponse;
-import com.example.simplevoteapi.domain.response.VoteSessionResponse;
+import com.example.simplevoteapi.domain.response.AgendaResponse;
+import com.example.simplevoteapi.domain.response.SessionResponse;
 import org.springframework.stereotype.Component;
 
 @Component
-public class VoteSessionResponseMapper {
+public class SessionResponseMapper {
 
-    public VoteSessionResponse map(Session session) {
+    public SessionResponse map(Session session) {
         Agenda agenda = session.getAgenda();
 
-        return VoteSessionResponse.builder()
+        return SessionResponse.builder()
                 .agenda(
-                        VoteAgendaResponse.builder()
+                        AgendaResponse.builder()
                         .id(agenda.getId())
                         .description(agenda.getDescription())
                         .build()

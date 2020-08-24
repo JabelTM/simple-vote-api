@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Table(name="votes")
 @EqualsAndHashCode(of = "id")
 @SequenceGenerator(name = "SEQ_V", sequenceName = "SEQ_VOTES", allocationSize = 1)
-@Getter @Setter @Builder
+@Getter @Setter @NoArgsConstructor
 public class Vote {
 
     @Id
@@ -19,7 +19,7 @@ public class Vote {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private VoteEnum vote;
+    private VoteEnum voteResult;
 
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)

@@ -5,10 +5,12 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface VoteSessionRepository extends CrudRepository<Session, Long> {
+public interface SessionRepository extends CrudRepository<Session, Long> {
 
     Session findById(long id);
 
     List<Session> findAll();
+
+    List<Session> findAllBySessionOpen(boolean isOpen);
 
 }

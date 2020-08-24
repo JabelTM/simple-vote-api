@@ -7,11 +7,11 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Getter @Setter @Builder
-public class VoteSessionResponse {
+public class SessionResponse {
 
     private long id;
     private int sessionTimeInMinutes;
-    private VoteAgendaResponse agenda;
+    private AgendaResponse agenda;
     private boolean sessionOpen;
     private LocalDateTime sessionStart;
     private LocalDateTime sessionEnd;

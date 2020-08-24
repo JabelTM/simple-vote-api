@@ -2,13 +2,16 @@ package com.example.simplevoteapi.domain;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @Entity
 @Table(name="users")
 @EqualsAndHashCode(of = "id")
-@Getter @Setter @Builder
+@Getter @Setter @NoArgsConstructor
 public class User {
 
     @Id

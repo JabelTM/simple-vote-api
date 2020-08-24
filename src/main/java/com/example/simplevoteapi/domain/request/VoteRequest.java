@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public class VoteRequest {
 
     @NotNull
-    private long voteAgendaId;
+    private long agendaId;
 
     @NotNull
     private VoteEnum vote;
