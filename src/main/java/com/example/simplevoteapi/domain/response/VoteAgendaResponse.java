@@ -1,12 +1,10 @@
 package com.example.simplevoteapi.domain.response;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Getter @Setter @Builder
 public class VoteAgendaResponse {
 
     private long id;

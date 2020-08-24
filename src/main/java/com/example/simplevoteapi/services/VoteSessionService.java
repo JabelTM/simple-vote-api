@@ -1,7 +1,7 @@
 package com.example.simplevoteapi.services;
 
-import com.example.simplevoteapi.domain.VoteAgenda;
-import com.example.simplevoteapi.domain.VoteSession;
+import com.example.simplevoteapi.domain.Agenda;
+import com.example.simplevoteapi.domain.Session;
 import com.example.simplevoteapi.domain.request.CreateVoteSessionRequest;
 import com.example.simplevoteapi.domain.response.VoteSessionResponse;
 import com.example.simplevoteapi.exceptions.OpenSessionException;
@@ -25,7 +25,7 @@ public class VoteSessionService {
 
     private static final int DEFAULT_SESSION_TIME = 1;
     private ScheduledFuture<?> schedulerFuture;
-    private VoteSession session;
+    private Session session;
 
     @Autowired
     private VoteAgendaService voteAgendaService;
@@ -55,12 +55,12 @@ public class VoteSessionService {
         return voteSessionResponseMapper.map(session);
     }
 
-    private Instant getScheduleTime(VoteSession session) {
+    private Instant getScheduleTime(Session session) {
         return Instant.now()
                 .plus(session.getSessionTimeInMinutes(), ChronoUnit.MINUTES);
     }
 
-    private Runnable scheduleCloseSession(VoteSession session) {
+    private Runnable scheduleCloseSession(Session session) {
         return () -> {
             stopSessionSchedule();
             session.setSessionEnd(LocalDateTime.now());
@@ -76,9 +76,9 @@ public class VoteSessionService {
     }
 
     private void createAndSetVoteSession(CreateVoteSessionRequest request) {
-        VoteAgenda agenda = voteAgendaService.findById(request.getAgendaId());
+        Agenda agenda = voteAgendaService.findById(request.getAgendaId());
 
-        session = new VoteSession();
+        session = new Session();
         session.setAgenda(agenda);
         session.setSessionOpen(true);
         session.setSessionStart(LocalDateTime.now());
@@ -92,14 +92,12 @@ public class VoteSessionService {
                 .collect(toList());
     }
 
-    public VoteSession getOpenSession() {
+    public Session getOpenSession() {
         return session;
     }
 
-    public void update(VoteSession session) {
-        this.session = session;
-        repository.save(session);
-        voteAgendaService.update(session.getAgenda());
+    public void updateOpenSession() {
+        session = repository.findById(session.getId());
     }
 
 }

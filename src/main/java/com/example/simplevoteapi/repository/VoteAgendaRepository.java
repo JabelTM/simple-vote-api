@@ -1,35 +1,14 @@
 package com.example.simplevoteapi.repository;
 
-import com.example.simplevoteapi.domain.VoteAgenda;
-import org.springframework.stereotype.Repository;
+import com.example.simplevoteapi.domain.Agenda;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-@Repository
-public class VoteAgendaRepository {
+public interface VoteAgendaRepository extends CrudRepository<Agenda, Long> {
 
-    private Map<Long, VoteAgenda> repository = new HashMap<Long, VoteAgenda>();
+    Agenda findById(long id);
 
-    public VoteAgenda save(VoteAgenda voteAgenda) {
-        if (repository.containsKey(voteAgenda.getId())) {
-            repository.replace(voteAgenda.getId(), voteAgenda);
-        } else {
-            Long newId = Long.valueOf(repository.size() + 1);
-            voteAgenda.setId(newId);
-            repository.put(newId, voteAgenda);
-        }
+    List<Agenda> findAll();
 
-        return voteAgenda;
-    }
-
-    public List<VoteAgenda> findAll() {
-        return new ArrayList<>(repository.values());
-    }
-
-    public VoteAgenda findById(long id) {
-        return repository.get(id);
-    }
 }

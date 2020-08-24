@@ -1,12 +1,12 @@
 package com.example.simplevoteapi.domain.response;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Getter @Setter @Builder
 public class VoteSessionResponse {
 
     private long id;
