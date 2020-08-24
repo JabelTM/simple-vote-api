@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class CreateVoteAgendaRequest {
+public class CreateAgendaRequest {
 
     @NotBlank(message = "Description may not be blank")
     private String description;

@@ -3,8 +3,6 @@ package com.example.simplevoteapi.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
@@ -19,11 +17,5 @@ public class Agenda {
     private long id;
 
     private String description;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinTable(name = "agendaVotes",
-            joinColumns = {@JoinColumn(name="agendaId")},
-            inverseJoinColumns = {@JoinColumn(name="voteId")})
-    private List<Vote> votes = new ArrayList<>();
 
 }

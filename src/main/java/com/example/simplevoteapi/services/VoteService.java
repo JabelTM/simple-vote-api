@@ -1,7 +1,7 @@
 package com.example.simplevoteapi.services;
 
-import com.example.simplevoteapi.domain.Vote;
 import com.example.simplevoteapi.domain.Session;
+import com.example.simplevoteapi.domain.Vote;
 import com.example.simplevoteapi.domain.request.VoteRequest;
 import com.example.simplevoteapi.exceptions.VoteException;
 import com.example.simplevoteapi.mapper.VoteMapper;
@@ -15,10 +15,10 @@ import java.util.List;
 public class VoteService {
 
     @Autowired
-    private VoteSessionService voteSessionService;
+    private SessionControlService sessionControlService;
 
     @Autowired
-    private VoteAgendaService voteAgendaService;
+    private AgendaService agendaService;
 
     @Autowired
     private VoteMapper voteMapper;
@@ -27,7 +27,7 @@ public class VoteService {
     private VoteRepository voteRepository;
 
     public void vote(VoteRequest voteRequest) {
-        Session session = voteSessionService.getOpenSession();
+        Session session = sessionControlService.getOpenSession();
 
         validateAgenda(voteRequest, session);
 
@@ -37,15 +37,14 @@ public class VoteService {
 
         voteRepository.save(vote);
 
-        voteSessionService.updateOpenSession();
+        sessionControlService.updateOpenSession();
     }
 
     private void validateVote(Vote vote, Session session) {
-        boolean userAlreadyVote = session
-                .getAgenda()
-                .getVotes()
-                .stream()
-                .anyMatch(v -> v.getUser().equals(vote.getUser()));
+        boolean userAlreadyVote = voteRepository
+                                    .findAllByAgendaId(session.getAgenda().getId())
+                                    .stream()
+                                    .anyMatch(v -> v.getUser().equals(vote.getUser()));
 
         if (userAlreadyVote) {
             throw new VoteException(VoteException.USER_ALREADY_VOTED);
@@ -53,13 +52,12 @@ public class VoteService {
     }
 
     private void validateAgenda(VoteRequest vote, Session session) {
-        if (session == null || session.getAgenda().getId() != vote.getVoteAgendaId()) {
+        if (session == null || session.getAgenda().getId() != vote.getAgendaId()) {
             throw new VoteException(VoteException.AGENDA_IS_CLOSED);
         }
     }
 
     public List<Vote> getVotes(long agendaId) {
-        return voteAgendaService.findById(agendaId)
-                .getVotes();
+        return voteRepository.findAllByAgendaId(agendaId);
     }
 }

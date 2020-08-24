@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 @Configuration
-public class ThreadPoolTaskSchedulerConfig {
+public class ThreadPoolTasksSchedulerConfig {
 
     @Bean
     public ThreadPoolTaskScheduler getTaskScheduler() {

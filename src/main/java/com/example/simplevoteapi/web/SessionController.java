@@ -1,8 +1,8 @@
 package com.example.simplevoteapi.web;
 
-import com.example.simplevoteapi.domain.request.CreateVoteSessionRequest;
-import com.example.simplevoteapi.domain.response.VoteSessionResponse;
-import com.example.simplevoteapi.services.VoteSessionService;
+import com.example.simplevoteapi.domain.request.CreateSessionRequest;
+import com.example.simplevoteapi.domain.response.SessionResponse;
+import com.example.simplevoteapi.services.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +13,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/session")
-public class VoteSessionController {
+public class SessionController {
 
     @Autowired
-    private VoteSessionService voteSessionService;
+    private SessionService sessionService;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody @Valid CreateVoteSessionRequest request) {
+    public ResponseEntity<Object> create(@RequestBody @Valid CreateSessionRequest request) {
         try {
-            VoteSessionResponse response = voteSessionService.create(request);
+            SessionResponse response = sessionService.createAndOpenSession(request);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,8 +30,8 @@ public class VoteSessionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VoteSessionResponse>> getSessions() {
-        return new ResponseEntity<>(voteSessionService.getSessions(), HttpStatus.OK);
+    public ResponseEntity<List<SessionResponse>> getSessions() {
+        return new ResponseEntity<>(sessionService.getSessions(), HttpStatus.OK);
     }
 
 }

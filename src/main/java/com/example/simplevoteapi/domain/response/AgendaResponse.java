@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter @Builder
-public class VoteAgendaResponse {
+public class AgendaResponse {
 
     private long id;
     private String description;

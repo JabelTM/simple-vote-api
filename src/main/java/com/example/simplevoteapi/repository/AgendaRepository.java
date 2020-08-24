@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface VoteAgendaRepository extends CrudRepository<Agenda, Long> {
+public interface AgendaRepository extends CrudRepository<Agenda, Long> {
 
     Agenda findById(long id);
 

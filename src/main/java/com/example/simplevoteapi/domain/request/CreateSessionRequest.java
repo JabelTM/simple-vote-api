@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class CreateVoteSessionRequest {
+public class CreateSessionRequest {
 
     @NotNull
     private long agendaId;
